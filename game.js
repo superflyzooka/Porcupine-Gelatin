@@ -76,22 +76,11 @@ function gameLoop(timestamp) {
 }
 
 // --- Update Game State ---
-function update(timestamp) { // timestamp is from requestAnimationFrame, or undefined on initial manual call from gameLoop()
-    let deltaTime = 0; // Default to 0, especially if timestamp is initially undefined
-
-    if (timestamp) { // Only proceed if timestamp is a valid number (from requestAnimationFrame)
-        if (lastTimestamp === 0) { // If this is the first valid timestamp received
-            lastTimestamp = timestamp; // Initialize lastTimestamp
-            // deltaTime remains 0 for this first valid frame, which is fine.
-            // Timers will effectively start on the next frame.
-        } else {
-            // We have a previous valid lastTimestamp, so calculate actual deltaTime
-            deltaTime = timestamp - lastTimestamp;
-        }
-        lastTimestamp = timestamp; // Update lastTimestamp for the next frame's calculation
-    }
-    // If timestamp was undefined (initial direct call to gameLoop), deltaTime remains 0.
-    // lastTimestamp (global) also remains 0 until the first valid timestamp from rAF.
+function update(timestamp) {
+    // Calculate delta time for consistent movement across different frame rates
+    if (!lastTimestamp) lastTimestamp = timestamp;
+    const deltaTime = timestamp - lastTimestamp;
+    lastTimestamp = timestamp;
 
     // --- Movement Logic ---
     if (keys['w'] || keys['W'] || keys['ArrowUp']) {
@@ -112,7 +101,7 @@ function update(timestamp) { // timestamp is from requestAnimationFrame, or unde
     player.y = Math.max(0, Math.min(player.y, GAME_HEIGHT - player.height));
 
     // --- Blinking Logic ---
-    // This logic is fine as long as deltaTime is a valid number (0 is fine initially)
+    // If not currently blinking, accumulate time towards the next blink interval
     if (!player.isBlinking) {
         player.blinkTimer += deltaTime;
         if (player.blinkTimer >= player.blinkInterval) {
