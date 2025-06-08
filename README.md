@@ -1,11 +1,11 @@
-How to use(3 easy steps):
+# How to use (3 easy steps):
 
-  Windows:
+  ### Windows:
     1. Download full repo as .zip 
     2. unzip the .zip
     3. than go into the folder and tun the game.html in your favorite browser
     
-Description and useful info:
+# Description and useful info:
 
 Your Gelo-pine: You control a small, adorable Gelo-pine creature on a colorful background.
 
