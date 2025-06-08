@@ -1,0 +1,26 @@
+body {
+    display: flex; /* Keep flex to center h1 if you want it */
+    flex-direction: column; /* Arrange items vertically */
+    justify-content: center; /* Center vertically if h1 is present, otherwise not strictly needed for canvas */
+    align-items: center; /* Center horizontally */
+    min-height: 100vh; /* Make body take full viewport height */
+    margin: 0; /* Remove default body margin */
+    overflow: hidden; /* Prevent scrollbars if content exceeds viewport */
+    background-color: #333;
+    color: #eee;
+    font-family: sans-serif;
+}
+
+canvas {
+    display: block; /* Remove extra space below canvas if it's inline */
+    border: 2px solid #eee;
+    background-color: #000;
+    /* Make canvas take maximum available space */
+    width: 100vw; /* Take 100% of viewport width */
+    height: 100vh; /* Take 100% of viewport height */
+    /* Adjust max-width/height if you want to limit its size while maintaining aspect ratio */
+    max-width: 100%;
+    max-height: 100%;
+    /* To ensure it covers available space without distorting h1 or other elements */
+    flex-grow: 1; /* Allow canvas to grow and take available space */
+}
