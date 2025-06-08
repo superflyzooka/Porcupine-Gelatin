@@ -301,14 +301,6 @@ function initGame() {
         checkImagesLoaded();
     };
 
-    // Generate static grass tufts once
-    for (let i = 0; i < NUM_TUFTS; i++) {
-        const x = getRandomInt(0, GAME_WIDTH);
-        const y = getRandomInt(0, GAME_HEIGHT);
-        const length = getRandomInt(5, TUFT_LENGTH);
-        grassTufts.push({ x: x, y: y, length: length });
-    }
-
     // --- NEW SYSTEM INITIALIZATION ---
     // Load existing legacy if available (for New Game+)
     loadLegacy();
@@ -348,6 +340,36 @@ function resizeGame() {
         player.x = Math.max(0, Math.min(player.x, GAME_WIDTH - player.width));
         player.y = Math.max(0, Math.min(player.y, GAME_HEIGHT - player.height));
     }
+
+    // Re-generate grassTufts
+    grassTufts = [];
+    for (let i = 0; i < NUM_TUFTS; i++) {
+        const x = getRandomInt(0, GAME_WIDTH);
+        const y = getRandomInt(0, GAME_HEIGHT);
+        const length = getRandomInt(5, TUFT_LENGTH); // TUFT_LENGTH is global
+        grassTufts.push({ x: x, y: y, length: length });
+    }
+
+    // Filter items array
+    items = items.filter(item => 
+        item.x + item.size > 0 && item.x < GAME_WIDTH &&
+        item.y + item.size > 0 && item.y < GAME_HEIGHT
+    );
+
+    // Filter trees array
+    trees = trees.filter(tree =>
+        tree.x + tree.width > 0 && tree.x < GAME_WIDTH &&
+        tree.y + tree.height > 0 && tree.y < GAME_HEIGHT
+    );
+
+    // Adjust basePosition
+    // Example: position base slightly offset from the center of the screen
+    basePosition.x = GAME_WIDTH / 2 - basePosition.width / 2 + 50; // Example offset
+    basePosition.y = GAME_HEIGHT / 2 - basePosition.height / 2 + 50; // Example offset
+    
+    // Clamp basePosition to ensure it's not off-screen if it's large
+    basePosition.x = Math.max(0, Math.min(basePosition.x, GAME_WIDTH - basePosition.width));
+    basePosition.y = Math.max(0, Math.min(basePosition.y, GAME_HEIGHT - basePosition.height));
 }
 
 // Function to generate a random number within a range
@@ -416,13 +438,13 @@ function update(timestamp) {
 
     // Calculate delta time for consistent movement across different frame rates
     // This was the fix from the previous session.
-    if (timestamp) {
-        if (lastTimestamp === 0) {
-            lastTimestamp = timestamp;
+    if (timestamp) { 
+        if (lastTimestamp === 0) { 
+            lastTimestamp = timestamp; 
         } else {
             deltaTime = timestamp - lastTimestamp;
         }
-        lastTimestamp = timestamp;
+        lastTimestamp = timestamp; 
     }
 
     // --- Cosmic Alignment Timer Update ---
